@@ -48,9 +48,11 @@ def login_check(username, password):
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
     usersDB = sql.SQLDatabase('database.db')
+    friendsDB = sql.SQLDatabase('database.db')
     result = usersDB.check_credentials(username,password)
+    friends_list = friendsDB.get_friends(username)
     if result:
-        return page_view("valid", name=username)
+        return page_view("valid", name=username, friendslist = friends_list)
     else:
         return page_view("invalid", reason=result)
 
@@ -116,6 +118,24 @@ def register_check(username,password):
         return page_view("login")
     else:
         return page_view("register")
+
+#-----------------------------------------------------------------------------
+# Message
+#-----------------------------------------------------------------------------
+
+def message_check(username,friend):
+    friendsDB = sql.SQLDatabase('database.db')
+    result = friendsDB.check_friend(username,friend)
+    if result:
+        messagesDB = sql.SQLDatabase('database.db')
+        messages = messagesDB.get_message(username,friend)
+        return page_view("message", username=username, friend=friend, messageslist=messages)
+    else:
+        return page_view("valid")
+
+def message_send(sender,receiver,message):
+    messageDB = sql.SQLDatabase('database.db')
+    messageDB.send_message(sender,receiver,message)
 
 #-----------------------------------------------------------------------------
 # Debug
