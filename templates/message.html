@@ -1,0 +1,28 @@
+<style type="text/css">
+  #messages-list{
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 300px;
+  height: 50px;
+  background: #EEE;
+  list-style-type: none;
+}
+</style>
+<p> You are ${username} </p>
+<p> You are chatting with ${friend} </p>
+<ul id='messages-list'>
+  <li>${messageslist}</li>
+</ul>
+<p>
+<form action='/message' method='post'>
+  This message is sent from:  <input name="sender" type="text" />
+</br>
+  To: <input name="receiver" type="text" />
+</br>
+  The content is: <input name="message" type="text" />
+</br>
+  <input value="send" type="submit">
+</form>
+</p>
+</center>

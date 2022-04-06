@@ -92,3 +92,66 @@ class SQLDatabase():
             return True
         else:
             return False
+    #-----------------------------------------------------------------------------
+    #Get friends list
+    def get_friends(self, username):
+        friends = []
+        sql_query = """
+                SELECT friend_a
+                FROM friends
+                WHERE friend_r = '{username}'
+            """
+
+        sql_query = sql_query.format(username=username)
+        results = self.execute(sql_query)
+        self.commit()
+        for row in results:
+            friends.append(row)
+
+        return friends
+    #-----------------------------------------------------------------------------
+    # Check friends
+    def check_friend(self, username, friend):
+        sql_query = """
+                SELECT 1
+                FROM Friends
+                WHERE friend_a = '{username}' AND friend_r = '{friend}'
+            """
+
+        sql_query = sql_query.format(username=username, friend=friend)
+        self.execute(sql_query)
+        self.commit()
+
+        if self.cur.fetchone():
+            return True
+        else:
+            return False
+
+    #-----------------------------------------------------------------------------
+    #Get message
+    def get_message(self, username, friend):
+        messages = []
+        sql_query = """
+                SELECT message
+                FROM Messages
+                WHERE sender = '{friend}' AND receiver = '{username}'
+        """
+
+        sql_query = sql_query.format(friend=friend, username=username)
+        results = self.execute(sql_query)
+        self.commit()
+        for row in results:
+            messages.append(row[0])
+        return messages
+
+    #-----------------------------------------------------------------------------
+    #Send message
+    def send_message(self, sender, receiver, message):
+        sql_query = """
+                INSERT INTO Messages
+                VALUES ('{sender}','{receiver}','{message}')
+        """
+        sql_query = sql_query.format(sender=sender,receiver=receiver,message=message)
+        self.execute(sql_query)
+        self.commit()
+        return True

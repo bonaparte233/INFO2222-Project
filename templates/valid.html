@@ -11,5 +11,15 @@
 </style>
 <p>This username-password combination is valid, welcome ${name}!</p>
 <ul id='friend-list'>
-  <li>Admin</li>
+  <li>${friendslist}</li>
 </ul>
+<p>
+<form action="/valid" method="post">
+  Your name: <input name="username" type="text" />
+</br>
+  Chat with: <input name="friend" type="text" />
+</br>
+  <input value="Chat" type="submit" />
+</form>
+</p>
+</center>
