@@ -131,6 +131,22 @@ def post_register():
 
 #-----------------------------------------------------------------------------
 
+@post('/valid')
+def post_message():
+    username = request.forms.get('username')
+    friend = request.forms.get('friend')
+    return model.message_check(username,friend)
+
+#-----------------------------------------------------------------------------
+
+@post('/message')
+def send():
+    sender = request.forms.get('sender')
+    receiver = request.forms.get('receiver')
+    message = request.forms.get('message')
+    return model.message_send(sender,receiver,message)
+
+#-----------------------------------------------------------------------------
 # Help with debugging
 @post('/debug/<cmd:path>')
 def post_debug(cmd):
