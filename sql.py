@@ -56,18 +56,33 @@ class SQLDatabase():
     #     # Add our admin user
     #     self.add_user('admin', admin_pasword, admin=1)
 
+    def get_salt(self, username):
+        sql_cmd = """
+                SELECT salt
+                FROM Users
+                WHERE username = '{username}'
+        """
+        sql_cmd = sql_cmd.format(username=username)
+        result = self.execute(sql_cmd)
+        self.commit()
+        x = ''
+        for row in result:
+            x = row[0]
+        return x
+
+
     #-----------------------------------------------------------------------------
     # User handling
     #-----------------------------------------------------------------------------
 
     # Add a user to the database
-    def add_user(self, username, password, admin=0):
+    def add_user(self, username, password, salt, admin=0):
         sql_cmd = """
                 INSERT INTO Users
-                VALUES('{username}', '{password}', {admin})
+                VALUES('{username}', '{password}', {admin}, '{salt}')
             """
 
-        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin)
+        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin, salt=salt)
 
         self.execute(sql_cmd)
         self.commit()
