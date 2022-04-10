@@ -8,9 +8,20 @@
 import view
 import random
 import sql
+import hashlib
+from random import Random
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
+
+def create_salt():
+    salt = ''
+    char = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+    len_char = len(char)-1
+    random = Random()
+    for i in range(0,4):
+        salt = salt + char[random.randint(0,len_char)]
+    return(salt)
 
 #-----------------------------------------------------------------------------
 # Index
@@ -49,7 +60,12 @@ def login_check(username, password):
     '''
     usersDB = sql.SQLDatabase('database.db')
     friendsDB = sql.SQLDatabase('database.db')
-    result = usersDB.check_credentials(username,password)
+    salt = usersDB.get_salt(username)
+    password_salt = password+salt
+    md5 = hashlib.md5()
+    md5.update(password_salt.encode('utf-8'))
+    hash_password = md5.hexdigest()
+    result = usersDB.check_credentials(username,hash_password)
     friends_list = friendsDB.get_friends(username)
     if result:
         return page_view("valid", name=username, friendslist = friends_list)
@@ -112,8 +128,13 @@ def register_form():
 #-----------------------------------------------------------------------------
 
 def register_check(username,password):
+    salt = create_salt()
+    password = password+salt
+    md5 = hashlib.md5()
+    md5.update(password.encode('utf-8'))
+    hash_password = md5.hexdigest()
     usersDB = sql.SQLDatabase('database.db')
-    result = usersDB.add_user(username,password)
+    result = usersDB.add_user(username,hash_password,salt)
     if result:
         return page_view("login")
     else:
