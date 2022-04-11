@@ -2,13 +2,38 @@
 Login with a username and password
 </p>
 <p>
-<form action="/login" method="post">
+
+<form action="/login" method="post" onsubmit="return checkForm()">
     Username: <input name="username" type="text" />
 </br>
-    Password: <input name="password" type="password" />
+    Password: <input id="password" name="password" type="password" />
 </br>
     <input value="Login" type="submit" />
 </form>
+
+<script src="https://cdn.jsdelivr.net/npm/node-forge@1.0.0/dist/forge.min.js"></script>
+
+<script>
+function checkForm() {
+    var publicKey = forge.pki.publicKeyFromPem("-----BEGIN PUBLIC KEY-----\n" +
+        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0NnLcLCDUSevd5krC+fG\n" +
+        "C3Gv+ohU/Pyq90ZipotTbAhtHGRYHvxDIKDmDsLlVEFVgucCnuASkx74qAZ19Bsh\n" +
+        "9qEup0Q/YqI5nLUkgfKd26ZiUxxiUTTMCJY+S1e8qYYi6+r/lNpn1FP5570akr4U\n" +
+        "PIM4Nfsba3zutkt8gu4dFnGaAh+EyivD0LoMHYy8VSyJvMeFLIxpKk9aTgJy1El6\n" +
+        "CI1PSZj70Jpz/4Lb9G6QT+7o0wzpD6EczLK9UrOvxfKmClGu+jCy9eviKCpH+ktG\n" +
+        "+arR51Xlqi9su/UV3g9kRloEB62cFU9nIHhnFH2qqat1gFHnC+w7cEJ8+C9NKXia\n" +
+        "kwIDAQAB\n" +
+        "-----END PUBLIC KEY-----");
+    let pwd = document.getElementById('password');
+    var encrypted = publicKey.encrypt(pwd.value, "RSA-OAEP", {
+            md: forge.md.sha256.create(),
+            mgf1: forge.mgf1.create()
+        });
+    pwd.value = forge.util.encode64(encrypted);
+    return true;
+}
+</script>
+
 </p>
 </center>
 
