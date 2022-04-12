@@ -76,13 +76,13 @@ class SQLDatabase():
     #-----------------------------------------------------------------------------
 
     # Add a user to the database
-    def add_user(self, username, password, salt, admin=0):
+    def add_user(self, username, password, salt, publickey, privatekey, admin=0):
         sql_cmd = """
                 INSERT INTO Users
-                VALUES('{username}', '{password}', {admin}, '{salt}')
+                VALUES('{username}', '{password}', {admin}, '{salt}', '{publickey}', '{privatekey}')
             """
 
-        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin, salt=salt)
+        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin, salt=salt, publickey=publickey, privatekey=privatekey)
 
         self.execute(sql_cmd)
         self.commit()
@@ -172,39 +172,3 @@ class SQLDatabase():
         return True
 
     #-----------------------------------------------------------------------------
-    #Store Keys
-    def add_keys(self, username, publickey, privatekey):
-        sql_query = """"
-                INSERT INTO Keys
-                VALUES('{username}','{publickey}','{privatekey}')
-        """
-        sql_query = sql_query.format(username=username,publickey=publickey,privatekey=privatekey)
-        self.execute(sql_query)
-        self.commit()
-        return True
-
-    def get_pubickey(self, username):
-        sql_query = """
-                SELECT publickey
-                FROM Keys
-                WHERE username = '{username}'
-        """
-        result = self.execute(sql_query)
-        self.commit()
-        x = ''
-        for row in result:
-            x = row[0]
-        return x
-
-    def get_privatekey(self, username):
-        sql_query = """
-                SELECT privatekey
-                FROM Keys
-                WHERE username = '{username}'
-        """
-        result = self.execute(sql_query)
-        self.commit()
-        x = ''
-        for row in result:
-            x = row[0]
-        return x

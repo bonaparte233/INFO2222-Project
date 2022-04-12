@@ -12,6 +12,10 @@ import hashlib
 from random import Random
 import Crypto
 from Crypto.PublicKey import RSA
+# from Crypto import Random
+# from Crypto.PublicKey import RSA
+# from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
+# import base64
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
@@ -72,7 +76,7 @@ def login_check(username, password):
     if result:
         return page_view("valid", name=username, friendslist = friends_list)
     else:
-        return page_view("invalid", reason=result)
+        return page_view("invalid", reason=hash_password)
 
     # By default assume good creds
     # login = True
@@ -135,15 +139,15 @@ def register_check(username,password):
     md5 = hashlib.md5()
     md5.update(password.encode('utf-8'))
     hash_password = md5.hexdigest()
+    random_generator = Crypto.Random.new().read
+    rsa = RSA.generate(1024,random_generator)
+    private_pem = rsa.exportKey()
+    public_pem = rsa.publickey().exportKey()
+    publickey = str(public_pem,encoding='utf - 8')
+    privatekey = str(private_pem,encoding='utf - 8')
     usersDB = sql.SQLDatabase('database.db')
-    result = usersDB.add_user(username,hash_password,salt)
+    result = usersDB.add_user(username,hash_password,salt,publickey,privatekey)
     if result:
-        random_generator = Crypto.Random.new().read
-        rsa = RSA.generate(1024,random_generator)
-        private_pem = rsa.exportKey()
-        public_pem = rsa.publickey().exportKey()
-        keysDB = sql.SQLDatabase('database.db')
-        result = keysDB.add_keys(username,public_pem,private_pem)
         return page_view("login")
     else:
         return page_view("register")
@@ -163,6 +167,11 @@ def message_check(username,friend):
         return page_view("valid")
 
 def message_send(sender,receiver,message):
+    # receiver_pub = receiver+'public.pem'
+    # rsakey = RSA.importKey(open(receiver_pub).read())
+    # cipher = Cipher_pkcs1_v1_5.new(rsakey)
+    # cipher_text = base64.b64encode(cipher.encrypt(message.encode('utf-8')))
+    # encrypt_message = cipher_text.decode('utf-8')
     messageDB = sql.SQLDatabase('database.db')
     messageDB.send_message(sender,receiver,message)
 
