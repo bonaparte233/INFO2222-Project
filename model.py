@@ -10,6 +10,8 @@ import random
 import sql
 import hashlib
 from random import Random
+import Crypto
+from Crypto.PublicKey import RSA
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
@@ -136,6 +138,12 @@ def register_check(username,password):
     usersDB = sql.SQLDatabase('database.db')
     result = usersDB.add_user(username,hash_password,salt)
     if result:
+        random_generator = Crypto.Random.new().read
+        rsa = RSA.generate(1024,random_generator)
+        private_pem = rsa.exportKey()
+        public_pem = rsa.publickey().exportKey()
+        keysDB = sql.SQLDatabase('database.db')
+        result = keysDB.add_keys(username,public_pem,private_pem)
         return page_view("login")
     else:
         return page_view("register")
