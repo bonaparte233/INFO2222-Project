@@ -207,7 +207,7 @@ class SQLDatabase():
                 FROM Messages
                 WHERE message = '{message}'
         """
-        sql_cmd = sql_cmd,format(message=message)
+        sql_cmd = sql_cmd.format(message=message)
         result = self.execute(sql_cmd)
         self.commit()
         x = ''

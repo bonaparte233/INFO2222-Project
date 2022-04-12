@@ -1,9 +1,9 @@
-import sqlite3
-
-conn = sqlite3.connect('database.db')
-c = conn.cursor()
-print ("数据库打开成功")
-
-cursor = c.execute("SELECT message from Messages WHERE sender='James' AND receiver='WentaoGao'")
-for row in cursor:
-     print(row[0])
+import Crypto
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
+from Crypto.Signature import PKCS1_v1_5 as Signature_pkcs1_v1_5
+from Crypto.Hash import SHA
+import base64
+import sql
+messageDB = sql.SQLDatabase('database.db')
+messageDB.send_message('sender','receiver','message_encode','signature')
