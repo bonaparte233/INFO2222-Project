@@ -161,12 +161,12 @@ class SQLDatabase():
 
     #-----------------------------------------------------------------------------
     #Send message
-    def send_message(self, sender, receiver, message):
+    def send_message(self, sender, receiver, message, signature):
         sql_query = """
                 INSERT INTO Messages
-                VALUES ('{sender}','{receiver}','{message}')
+                VALUES ('{sender}','{receiver}','{message}','{signature}')
         """
-        sql_query = sql_query.format(sender=sender,receiver=receiver,message=message)
+        sql_query = sql_query.format(sender=sender,receiver=receiver,message=message,signature=signature)
         self.execute(sql_query)
         self.commit()
         return True
@@ -194,6 +194,20 @@ class SQLDatabase():
                 WHERE username = '{username}'
         """
         sql_cmd = sql_cmd.format(username=user)
+        result = self.execute(sql_cmd)
+        self.commit()
+        x = ''
+        for row in result:
+            x = row[0]
+        return x
+
+    def get_signature(self, message):
+        sql_cmd = """
+                SELECT signature
+                FROM Messages
+                WHERE message = '{message}'
+        """
+        sql_cmd = sql_cmd,format(message=message)
         result = self.execute(sql_cmd)
         self.commit()
         x = ''

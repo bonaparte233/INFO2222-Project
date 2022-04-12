@@ -13,7 +13,7 @@ con.execute("INSERT INTO Friends (friend_r, friend_a) VALUES ('James', 'WentaoGa
 con.commit()
 
 con.execute("DROP TABLE IF EXISTS Messages;")
-con.execute("CREATE TABLE Messages (sender VARCHAR(200), receiver VARCHAR(200), message VARCHAR(1000))")
+con.execute("CREATE TABLE Messages (sender VARCHAR(200), receiver VARCHAR(200), message VARCHAR(1000), signature VARCHAR(5000))")
 con.execute("INSERT INTO Messages (sender, receiver, message) VALUES ('WentaoGao', 'James', 'Hi')")
 con.execute("INSERT INTO Messages (sender, receiver, message) VALUES ('James', 'WentaoGao', 'Hello')")
 con.commit()
