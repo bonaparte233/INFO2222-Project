@@ -17,3 +17,7 @@ con.execute("CREATE TABLE Messages (sender VARCHAR(200), receiver VARCHAR(200), 
 con.execute("INSERT INTO Messages (sender, receiver, message) VALUES ('WentaoGao', 'James', 'Hi')")
 con.execute("INSERT INTO Messages (sender, receiver, message) VALUES ('James', 'WentaoGao', 'Hello')")
 con.commit()
+
+con.execute("DROP TABLE IF EXISTS Keys;")
+con.execute("CREATE TABLE Keys (username VARCHAR(200), publickey VARCHAR(2000), privatekey VARCHAR(2000))")
+con.commit()
