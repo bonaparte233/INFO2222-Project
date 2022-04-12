@@ -12,10 +12,11 @@ import hashlib
 from random import Random
 import Crypto
 from Crypto.PublicKey import RSA
-# from Crypto import Random
-# from Crypto.PublicKey import RSA
-# from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
-# import base64
+from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
+from Crypto.Signature import PKCS1_v1_5 as Signature_pkcs1_v1_5
+from Crypto.Hash import SHA
+import base64
+
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
@@ -157,23 +158,50 @@ def register_check(username,password):
 #-----------------------------------------------------------------------------
 
 def message_check(username,friend):
+    usersDB = sql.SQLDatabase('database.db')
     friendsDB = sql.SQLDatabase('database.db')
     result = friendsDB.check_friend(username,friend)
     if result:
         messagesDB = sql.SQLDatabase('database.db')
         messages = messagesDB.get_message(username,friend)
-        return page_view("message", username=username, friend=friend, messageslist=messages)
+
+        publickey = usersDB.get_publickey(friend)
+        privatekey = usersDB.get_privatekey(username)
+
+        decode_messages = []
+
+        for message in messages:
+            verifier = Signature_pkcs1_v1_5.new(publickey)
+            signature = messagesDB.get_signature(message)
+            hsmsg = SHA.new()
+            hsmsg.update(message.encode("utf-8"))
+            is_verify = verifier.verify(hsmsg, base64.b64decode(signature))
+            if is_verify:
+                message = message.encode('utf-8')
+                cipher = Cipher_pkcs1_v1_5.new(privatekey)
+                message = cipher.decrypt(base64.b64decode(message))
+                decode_messages.append(message)
+        return page_view("message", username=username, friend=friend, messageslist=decode_messages)
     else:
         return page_view("valid")
 
 def message_send(sender,receiver,message):
-    # receiver_pub = receiver+'public.pem'
-    # rsakey = RSA.importKey(open(receiver_pub).read())
-    # cipher = Cipher_pkcs1_v1_5.new(rsakey)
-    # cipher_text = base64.b64encode(cipher.encrypt(message.encode('utf-8')))
-    # encrypt_message = cipher_text.decode('utf-8')
+    usersDB = sql.SQLDatabase('database.db')
+
+    privatekey = usersDB.get_privatekey(sender)
+    publickey = usersDB.get_publickey(receiver)
+
+    cipher = Cipher_pkcs1_v1_5.new(publickey)
+    message = base64.b64encode(cipher.encrypt(message.encode('utf-8')))
+
+    signer = Signature_pkcs1_v1_5.new(privatekey)
+    digest = SHA.new()
+    digest.update(message.encode("utf-8"))
+    sign = signer.sign(digest)
+    signature = base64.b64encode(sign)
+
     messageDB = sql.SQLDatabase('database.db')
-    messageDB.send_message(sender,receiver,message)
+    messageDB.send_message(sender,receiver,message,signature)
 
 #-----------------------------------------------------------------------------
 # Debug

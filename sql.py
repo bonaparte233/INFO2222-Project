@@ -172,3 +172,31 @@ class SQLDatabase():
         return True
 
     #-----------------------------------------------------------------------------
+
+    def get_privatekey(self, user):
+        sql_cmd = """
+                SELECT privatekey
+                FROM Users
+                WHERE username = '{username}'
+        """
+        sql_cmd = sql_cmd.format(username=user)
+        result = self.execute(sql_cmd)
+        self.commit()
+        x = ''
+        for row in result:
+            x = row[0]
+        return x
+
+    def get_publickey(self, user):
+        sql_cmd = """
+                SELECT publickey
+                FROM Users
+                WHERE username = '{username}'
+        """
+        sql_cmd = sql_cmd.format(username=user)
+        result = self.execute(sql_cmd)
+        self.commit()
+        x = ''
+        for row in result:
+            x = row[0]
+        return x
