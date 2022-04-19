@@ -225,7 +225,7 @@ class SQLDatabase():
     #-----------------------------------------------------------------------------
     #Get Discussion
     def get_discussion(self):
-        dsicussion = []
+        discussion = []
         sql_query = """
                 SELECT poster, contents
                 FROM Discussion

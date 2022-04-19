@@ -215,7 +215,7 @@ def discussion_form():
 
 def discussion_post(poster, contents):
     discussionDB = sql.SQLDatabase("database.db")
-    discussionDB.discussion_post(poster, contents)
+    discussionDB.post_discussion(poster, contents)
 
 # -----------------------------------------------------------------------------
 # Debug
