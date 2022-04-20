@@ -8,8 +8,8 @@ con.commit()
 
 con.execute("DROP TABLE IF EXISTS Friends;")
 con.execute("CREATE TABLE Friends (friend_r VARCHAR(200), friend_a VARCHAR(200))")
-con.execute("INSERT INTO Friends (friend_r, friend_a) VALUES ('WentaoGao', 'James')")
-con.execute("INSERT INTO Friends (friend_r, friend_a) VALUES ('James', 'WentaoGao')")
+con.execute("INSERT INTO Friends (friend_r, friend_a) VALUES ('WentaoGao', 'LangyiChen')")
+con.execute("INSERT INTO Friends (friend_r, friend_a) VALUES ('LangyiChen', 'WentaoGao')")
 con.commit()
 
 con.execute("DROP TABLE IF EXISTS Messages;")

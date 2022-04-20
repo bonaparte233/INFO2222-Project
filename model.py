@@ -185,8 +185,6 @@ def message_check(username, friend):
             is_verify = verifier.verify(hsmsg, base64.b64decode(signature))
             if is_verify:
                 decode_messages.append(message.decode('utf-8'))
-            else:
-                print(123)
         return page_view("message", username=username, friend=friend, messageslist=decode_messages)
     else:
         return page_view("valid")
