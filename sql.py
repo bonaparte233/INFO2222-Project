@@ -76,13 +76,13 @@ class SQLDatabase():
     #-----------------------------------------------------------------------------
 
     # Add a user to the database
-    def add_user(self, username, password, salt, publickey, privatekey, admin=0):
+    def add_user(self, username, password, salt, publickey, privatekey, admin=0, mute=0):
         sql_cmd = """
                 INSERT INTO Users
-                VALUES('{username}', '{password}', {admin}, '{salt}', '{publickey}', '{privatekey}')
+                VALUES('{username}', '{password}', {admin}, '{salt}', '{publickey}', '{privatekey}', '{mute}')
             """
 
-        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin, salt=salt, publickey=publickey, privatekey=privatekey)
+        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin, salt=salt, publickey=publickey, privatekey=privatekey, mute=mute)
 
         self.execute(sql_cmd)
         self.commit()
