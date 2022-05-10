@@ -199,7 +199,18 @@ def send():
 
 
 # -----------------------------------------------------------------------------
+@get('/discussion')
+def get_discussion():
+    return model.discussion_form()
 
+# -----------------------------------------------------------------------------
+@post('/discussion')
+def post_discussion():
+    poster = request.forms.get('poster')
+    contents = request.forms.get('discussion')
+    return model.discussion_post(poster, contents)
+
+# -----------------------------------------------------------------------------
 @post('/manage')
 def manage():
     pass
