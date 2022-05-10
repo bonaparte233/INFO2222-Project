@@ -11,5 +11,11 @@
 </style>
 
 <ul id='users'>
-  <li>${users} <button>mute</button> <button>delete</button></li>
+  <li>${users}</li>
 </ul>
+<form action='/manage' method='post'>
+  Username:  <input name="user" type="text" />
+</br>
+  <input value="mute" type="submit">
+  <input value="delete" type="submit">
+</form>

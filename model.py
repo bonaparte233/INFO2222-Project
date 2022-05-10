@@ -213,17 +213,20 @@ def delete_user(user):
     usersDB = sql.SQLDatabase('database.db')
     usersDB.delete_user(user)
 
+
 # -----------------------------------------------------------------------------
 # Discussion
 # -----------------------------------------------------------------------------
 def discussion_form():
     discussionDB = sql.SQLDatabase('database.db')
     result = discussionDB.get_discussion()
-    return page_view("discussion", discussionlist = result)
+    return page_view("discussion", discussionlist=result)
+
 
 def discussion_post(poster, contents):
     discussionDB = sql.SQLDatabase("database.db")
     discussionDB.post_discussion(poster, contents)
+
 
 # -----------------------------------------------------------------------------
 # Debug
