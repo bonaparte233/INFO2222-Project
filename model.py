@@ -28,7 +28,7 @@ def create_salt():
     random = Random()
     for i in range(0, 4):
         salt = salt + char[random.randint(0, len_char)]
-    return (salt)
+    return salt
 
 
 # -----------------------------------------------------------------------------
