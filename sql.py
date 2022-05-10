@@ -278,6 +278,18 @@ class SQLDatabase():
         return True
 
     # -----------------------------------------------------------------------------
+    # mute user
+
+    def unmute_user(self, username):
+        sql_query = """
+                   UPDATE Users SET mute = 0 WHERE username = '{username}'
+           """
+        sql_query = sql_query.format(username=username)
+        self.execute(sql_query)
+        self.commit()
+        return True
+
+    # -----------------------------------------------------------------------------
     # delete user
     def delete_user(self, username):
         sql_query = """
@@ -287,3 +299,21 @@ class SQLDatabase():
         self.execute(sql_query)
         self.commit()
         return True
+
+    # -----------------------------------------------------------------------------
+    # check mute
+    def check_mute(self, username):
+        sql_query = """
+                SELECT mute from users WHERE username = '{username}'
+        """
+        sql_query = sql_query.format(username=username)
+        result = self.execute(sql_query)
+        self.commit()
+        x = ''
+        for row in result:
+            x = row[0]
+
+        if x == '1':
+            return False
+        else:
+            return True

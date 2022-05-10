@@ -209,6 +209,13 @@ def mute_user(user):
 
 # -----------------------------------------------------------------------------
 
+def unmute_user(user):
+    usersDB = sql.SQLDatabase('database.db')
+    usersDB.unmute_user(user)
+
+
+# -----------------------------------------------------------------------------
+
 def delete_user(user):
     usersDB = sql.SQLDatabase('database.db')
     usersDB.delete_user(user)
@@ -224,8 +231,12 @@ def discussion_form():
 
 
 def discussion_post(poster, contents):
-    discussionDB = sql.SQLDatabase("database.db")
-    discussionDB.post_discussion(poster, contents)
+    userDB = sql.SQLDatabase("database.db")
+    if userDB.check_mute(poster) is True:
+        discussionDB = sql.SQLDatabase("database.db")
+        discussionDB.post_discussion(poster, contents)
+    else:
+        return page_view("error")
 
 
 # -----------------------------------------------------------------------------

@@ -218,7 +218,14 @@ def get_manage():
 # -----------------------------------------------------------------------------
 @post('/manage')
 def post_manage():
+    m = request.forms.get('m')
     user = request.forms.get('user')
+    if m == 'mute':
+        return model.mute_user(user)
+    elif m == 'unmute':
+        return model.unmute_user(user)
+    elif m == 'delete':
+        return model.delete_user(user)
 
 # -----------------------------------------------------------------------------
 # Help with debugging
