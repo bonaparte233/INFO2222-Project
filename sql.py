@@ -1,5 +1,6 @@
 import sqlite3
 
+
 # This class is a simple handler for all of our SQL database actions
 # Practicing a good separation of concerns, we should only ever call
 # These functions from our models
@@ -33,7 +34,7 @@ class SQLDatabase():
     def commit(self):
         self.conn.commit()
 
-    #-----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
 
     # Sets up the database
     # Default admin password
@@ -70,10 +71,9 @@ class SQLDatabase():
             x = row[0]
         return x
 
-
-    #-----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
     # User handling
-    #-----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
 
     # Add a user to the database
     def add_user(self, username, password, salt, publickey, privatekey, admin=0, mute=0):
@@ -82,13 +82,14 @@ class SQLDatabase():
                 VALUES('{username}', '{password}', {admin}, '{salt}', '{publickey}', '{privatekey}', '{mute}')
             """
 
-        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin, salt=salt, publickey=publickey, privatekey=privatekey, mute=mute)
+        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin, salt=salt, publickey=publickey,
+                                 privatekey=privatekey, mute=mute)
 
         self.execute(sql_cmd)
         self.commit()
         return True
 
-    #-----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
 
     # Check login credentials
     def check_credentials(self, username, password):
@@ -107,8 +108,9 @@ class SQLDatabase():
             return True
         else:
             return False
-    #-----------------------------------------------------------------------------
-    #Get friends list
+
+    # -----------------------------------------------------------------------------
+    # Get friends list
     def get_friends(self, username):
         friends = []
         sql_query = """
@@ -124,7 +126,8 @@ class SQLDatabase():
             friends.append(row)
 
         return friends
-    #-----------------------------------------------------------------------------
+
+    # -----------------------------------------------------------------------------
     # Check friends
     def check_friend(self, username, friend):
         sql_query = """
@@ -142,8 +145,8 @@ class SQLDatabase():
         else:
             return False
 
-    #-----------------------------------------------------------------------------
-    #Get message
+    # -----------------------------------------------------------------------------
+    # Get message
     def get_message(self, username, friend):
         messages = []
         sql_query = """
@@ -159,20 +162,20 @@ class SQLDatabase():
             messages.append(row[0])
         return messages
 
-    #-----------------------------------------------------------------------------
-    #Send message
+    # -----------------------------------------------------------------------------
+    # Send message
     def send_message(self, sender, receiver, message, signature):
         sql_query = """
                 INSERT INTO Messages
                 VALUES ('{sender}','{receiver}','{message}','{signature}')
         """
-        sql_query = sql_query.format(sender=sender,receiver=receiver,message=message,signature=signature)
+        sql_query = sql_query.format(sender=sender, receiver=receiver, message=message, signature=signature)
         self.execute(sql_query)
         self.commit()
         return True
 
-    #-----------------------------------------------------------------------------
-
+    # -----------------------------------------------------------------------------
+    # get private key
     def get_privatekey(self, user):
         sql_cmd = """
                 SELECT privatekey
@@ -187,6 +190,8 @@ class SQLDatabase():
             x = row[0]
         return x
 
+    # -----------------------------------------------------------------------------
+    # get public key
     def get_publickey(self, user):
         sql_cmd = """
                 SELECT publickey
@@ -201,6 +206,8 @@ class SQLDatabase():
             x = row[0]
         return x
 
+    # -----------------------------------------------------------------------------
+    # get signature
     def get_signature(self, message):
         sql_cmd = """
                 SELECT signature
@@ -214,3 +221,31 @@ class SQLDatabase():
         for row in result:
             x = row[0]
         return x
+
+    # -----------------------------------------------------------------------------
+    # Get users
+    def get_users(self, username):
+        users = []
+        sql_query = """
+                SELECT username
+                FROM Users
+                WHERE username = '{username}'
+            """
+
+        sql_query = sql_query.format(username=username)
+        results = self.execute(sql_query)
+        self.commit()
+        for row in results:
+            users.append(row)
+
+        return users
+
+    # -----------------------------------------------------------------------------
+    # mute user
+    def mute_user(self, username):
+        pass
+
+    # -----------------------------------------------------------------------------
+    # delete user
+    def delete_user(self, username):
+        pass

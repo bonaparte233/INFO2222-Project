@@ -199,7 +199,15 @@ def send():
 
 
 # -----------------------------------------------------------------------------
+
+@post('/manage')
+def manage():
+    pass
+
+
+# -----------------------------------------------------------------------------
 # Help with debugging
+
 @post('/debug/<cmd:path>')
 def post_debug(cmd):
     return model.debug(cmd)

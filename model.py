@@ -190,24 +190,20 @@ def message_check(username, friend):
         return page_view("valid")
 
 
-def message_send(sender, receiver, message):
+# -----------------------------------------------------------------------------
+# Manage
+# -----------------------------------------------------------------------------
+
+def mute_user(user):
     usersDB = sql.SQLDatabase('database.db')
+    usersDB.mute_user(user)
 
-    privatekey = RSA.importKey(usersDB.get_privatekey(sender))
-    publickey = RSA.importKey(usersDB.get_publickey(receiver))
 
-    cipher = Cipher_pkcs1_v1_5.new(publickey)
-    message = message.encode('utf-8')
-    message_encode = base64.b64encode(cipher.encrypt(message)).decode('utf-8')
-    signer = Signature_pkcs1_v1_5.new(privatekey)
-    digest = SHA.new()
-    digest.update(message)
-    sign = signer.sign(digest)
-    signature = base64.b64encode(sign).decode('utf-8')
+# -----------------------------------------------------------------------------
 
-    messageDB = sql.SQLDatabase('database.db')
-    messageDB.send_message(sender, receiver, message_encode, signature)
-
+def delete_user(user):
+    usersDB = sql.SQLDatabase('database.db')
+    usersDB.delete_user(user)
 
 # -----------------------------------------------------------------------------
 # Debug
