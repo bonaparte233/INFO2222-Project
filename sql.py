@@ -222,6 +222,34 @@ class SQLDatabase():
             x = row[0]
         return x
 
+    #-----------------------------------------------------------------------------
+    #Get Discussion
+    def get_discussion(self):
+        dsicussion = []
+        sql_query = """
+                SELECT poster, contents
+                FROM Discussion
+        """
+        sql_query = sql_query.format()
+        results = self.execute(sql_query)
+        self.commit()
+        for row in results:
+            x = (row[0],row[1])
+            discussion.append(x)
+        return discussion
+
+    #-----------------------------------------------------------------------------
+    #Post Discussion
+    def post_discussion(self, poster, contents):
+        sql_query = """
+                INSERT INTO Discussion
+                VALUES ('{poster}','{contents}')
+        """
+        sql_query = sql_query.format(poster=poster,contents=contents)
+        self.execute(sql_query)
+        self.commit()
+        return True
+
     # -----------------------------------------------------------------------------
     # Get users
     def get_users(self, username):
