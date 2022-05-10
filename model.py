@@ -194,6 +194,14 @@ def message_check(username, friend):
 # Manage
 # -----------------------------------------------------------------------------
 
+def users():
+    usersDB = sql.SQLDatabase('database.db')
+    result = usersDB.get_users()
+    return page_view("manage", users=result)
+
+
+# -----------------------------------------------------------------------------
+
 def mute_user(user):
     usersDB = sql.SQLDatabase('database.db')
     usersDB.mute_user(user)

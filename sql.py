@@ -222,8 +222,8 @@ class SQLDatabase():
             x = row[0]
         return x
 
-    #-----------------------------------------------------------------------------
-    #Get Discussion
+    # -----------------------------------------------------------------------------
+    # Get Discussion
     def get_discussion(self):
         discussion = []
         sql_query = """
@@ -234,33 +234,31 @@ class SQLDatabase():
         results = self.execute(sql_query)
         self.commit()
         for row in results:
-            x = (row[0],row[1])
+            x = (row[0], row[1])
             discussion.append(x)
         return discussion
 
-    #-----------------------------------------------------------------------------
-    #Post Discussion
+    # -----------------------------------------------------------------------------
+    # Post Discussion
     def post_discussion(self, poster, contents):
         sql_query = """
                 INSERT INTO Discussion
                 VALUES ('{poster}','{contents}')
         """
-        sql_query = sql_query.format(poster=poster,contents=contents)
+        sql_query = sql_query.format(poster=poster, contents=contents)
         self.execute(sql_query)
         self.commit()
         return True
 
     # -----------------------------------------------------------------------------
     # Get users
-    def get_users(self, username):
+    def get_users(self):
         users = []
         sql_query = """
                 SELECT username
                 FROM Users
-                WHERE username = '{username}'
             """
 
-        sql_query = sql_query.format(username=username)
         results = self.execute(sql_query)
         self.commit()
         for row in results:
@@ -274,17 +272,18 @@ class SQLDatabase():
         sql_query = """
                 UPDATE Users SET mute = 1 WHERE username = '{username}'
         """
-        sql_query = sql_query.format(username = username)
+        sql_query = sql_query.format(username=username)
         self.execute(sql_query)
         self.commit()
         return True
+
     # -----------------------------------------------------------------------------
     # delete user
     def delete_user(self, username):
         sql_query = """
                 DELETE FROM Users WHERE username = '{username}'
         """
-        sql_query = sql_query.format(username = username)
+        sql_query = sql_query.format(username=username)
         self.execute(sql_query)
         self.commit()
         return True

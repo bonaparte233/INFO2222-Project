@@ -211,9 +211,9 @@ def post_discussion():
     return model.discussion_post(poster, contents)
 
 # -----------------------------------------------------------------------------
-@post('/manage')
+@get('/manage')
 def manage():
-    pass
+    return model.users()
 
 # -----------------------------------------------------------------------------
 # Help with debugging
