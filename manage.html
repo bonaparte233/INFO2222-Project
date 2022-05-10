@@ -1,0 +1,21 @@
+<style type="text/css">
+  #user-list{
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 300px;
+  height: 50px;
+  background: #EEE;
+  list-style-type: none;
+}
+</style>
+
+<ul id='users'>
+  <li>${users}</li>
+</ul>
+<form action='/manage' method='post'>
+  Username:  <input name="user" type="text" />
+</br>
+  <input value="mute" type="submit">
+  <input value="delete" type="submit">
+</form>
