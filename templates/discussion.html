@@ -1,0 +1,21 @@
+<style type="text/css">
+  #discussion-list{
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 300px;
+  height: 50px;
+  background: #EEE;
+  list-style-type: none;
+}
+</style>
+<ul id='discussion-list'>
+  <li>${discussionlist}</li>
+</ul>
+<form action='/discussion' method='post'>
+  You are:  <input name="poster" type="text" />
+</br>
+  The content is: <input id="discussion" name="discussion" type="text" />
+</br>
+  <input value="post" type="submit">
+</form>

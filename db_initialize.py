@@ -15,3 +15,8 @@ con.commit()
 con.execute("DROP TABLE IF EXISTS Messages;")
 con.execute("CREATE TABLE Messages (sender VARCHAR(200), receiver VARCHAR(200), message VARCHAR(1000), signature VARCHAR(5000))")
 con.commit()
+
+con.execute("DROP TABLE IF EXISTS Discussion;")
+con.execute("CREATE TABLE Discussion (poster VARCHAR(200), contents VARCHAR(5000))")
+con.execute("INSERT INTO Discussion (poster, contents) VALUES ('aaa', 'Hello')")
+con.commit()
