@@ -271,9 +271,20 @@ class SQLDatabase():
     # -----------------------------------------------------------------------------
     # mute user
     def mute_user(self, username):
-        pass
-
+        sql_query = """
+                UPDATE Users SET mute = 1 WHERE username = '{username}'
+        """
+        sql_query = sql_query.format(username = username)
+        self.execute(sql_query)
+        self.commit()
+        return True
     # -----------------------------------------------------------------------------
     # delete user
     def delete_user(self, username):
-        pass
+        sql_query = """
+                DELETE FROM Users WHERE username = '{username}'
+        """
+        sql_query = sql_query.format(username = username)
+        self.execute(sql_query)
+        self.commit()
+        return True
